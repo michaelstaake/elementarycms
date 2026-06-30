@@ -1,0 +1,17 @@
+Options -Indexes
+RewriteEngine On
+
+# Route requests for non-existent files/directories through the front controller.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?route=$1 [QSA,L]
+
+# Deny direct web access to sensitive files (schema dumps, samples, docs, lockfiles).
+<FilesMatch "\.(sql|sample|md|json|lock|dist)$">
+    Require all denied
+</FilesMatch>
+
+# Deny direct access to the config and version files.
+<FilesMatch "^(config\.php|config\.sample\.php|version\.php)$">
+    Require all denied
+</FilesMatch>

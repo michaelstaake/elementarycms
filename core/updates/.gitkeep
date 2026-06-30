@@ -1,0 +1,5 @@
+<?php
+
+// Future database migrations go here.
+// Each file is named after the version it upgrades TO (e.g., 0.0.2.php).
+// The upgrader runs migrations where version > current DB version and version <= version.php.

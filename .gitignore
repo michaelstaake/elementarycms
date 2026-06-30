@@ -1,0 +1,10 @@
+# Cache contents
+cache/*
+!cache/.gitkeep
+
+# File uploads contents
+file/*
+!file/.gitkeep
+
+# Configuration (contains sensitive data)
+config.php

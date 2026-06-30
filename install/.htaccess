@@ -1,0 +1,7 @@
+Options -Indexes
+RewriteEngine On
+RewriteRule ^(.*)$ /index.php?route=install/$1 [QSA,L]
+
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
