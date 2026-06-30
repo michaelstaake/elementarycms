@@ -385,7 +385,7 @@ if ($action === 'edit' || $action === 'new') {
                             $fileUrl = file_url($f['filename']);
                         ?>
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="card h-100 page-image-option" onclick="selectPageImage(<?= json_encode($f['filename']) ?>, <?= json_encode($fileUrl) ?>)" style="cursor: pointer;">
+                            <div class="card h-100 page-image-option" onclick="selectPageImage(<?= esc(json_encode($f['filename'])) ?>, <?= esc(json_encode($fileUrl)) ?>)" style="cursor: pointer;">
                                 <img src="<?= esc($fileUrl) ?>" alt="<?= esc($f['title']) ?>" class="img-fluid" style="height: 100px; object-fit: cover;">
                                 <div class="card-body p-2 text-center">
                                     <small class="text-truncate d-block"><?= esc($f['title']) ?></small>
@@ -475,7 +475,7 @@ if ($action === 'edit' || $action === 'new') {
                             $fileUrl = file_url($f['filename']);
                         ?>
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="card h-100 page-video-option" onclick="selectPageVideo(<?= json_encode($f['filename']) ?>, <?= json_encode($fileUrl) ?>)" style="cursor: pointer;">
+                            <div class="card h-100 page-video-option" onclick="selectPageVideo(<?= esc(json_encode($f['filename'])) ?>, <?= esc(json_encode($fileUrl)) ?>)" style="cursor: pointer;">
                                 <div class="card-body p-3 text-center">
                                     <i class="bi bi-camera-video fs-1 text-muted"></i>
                                     <small class="text-truncate d-block mt-2"><?= esc($f['title']) ?></small>
@@ -662,6 +662,7 @@ if ($action === 'edit' || $action === 'new') {
     const PageBuilder = {
         structure: { sections: PageBuilderConfig.sections },
         elementSettingsContext: null,
+        MIN_COLUMN_WIDTH: 5,
 
         init() {
             try {
@@ -1513,7 +1514,9 @@ if ($action === 'edit' || $action === 'new') {
             const widthGroup = document.getElementById('elementWidthGroup');
             const colCount = type === 'column' ? this.structure.sections[si].rows[ri].columns.length : 0;
             if (type === 'column' && colCount > 1) {
-                const minWidth = Math.round(100 / colCount * 10) / 10;
+                // Fixed floor per column (not 100/colCount) so the slider always has a usable
+                // range instead of min and max collapsing to the same value at low column counts.
+                const minWidth = this.MIN_COLUMN_WIDTH;
                 const maxWidth = 100 - (colCount - 1) * minWidth;
                 const widthInput = document.getElementById('elementWidth');
                 widthInput.min = minWidth;
