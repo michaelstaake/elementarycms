@@ -137,7 +137,7 @@ class HtmlSanitizer
       return;
     }
 
-    if (!preg_match('#^(https?://|/|#|mailto:)#i', $href)) {
+    if (!preg_match('~^(https?://|/|#|mailto:)~i', $href)) {
       $element->removeAttribute('href');
     }
 

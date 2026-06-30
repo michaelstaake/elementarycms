@@ -47,7 +47,7 @@
                                         <?php foreach ($column['blocks'] ?? [] as $block): ?>
                                             <?php if ($block['block_type'] === 'text'): ?>
                                                 <div<?= element_attrs($block, 'page-block page-block-text') ?>>
-                                                    <?= nl2br(esc($block['block_data']['text'] ?? '')) ?>
+                                                    <?= $block['block_data']['text'] ?? '' ?>
                                                 </div>
                                             <?php elseif ($block['block_type'] === 'image'): ?>
                                                 <?php

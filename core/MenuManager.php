@@ -33,11 +33,11 @@ class MenuManager
     /**
      * Get all items for a menu, sorted by sort_order.
      */
-    public static function getMenuItems(int $menuId): array
+    public static function getMenuItems(int|string $menuId): array
     {
         return Database::fetchAll(
             'SELECT * FROM menu_items WHERE menu_id = ? ORDER BY sort_order ASC',
-            [$menuId]
+            [(int) $menuId]
         );
     }
 
@@ -52,8 +52,9 @@ class MenuManager
     /**
      * Get items organized as a tree (with children nested).
      */
-    public static function getMenuItemsTree(int $menuId): array
+    public static function getMenuItemsTree(int|string $menuId): array
     {
+        $menuId = (int) $menuId;
         $flat = self::getMenuItems($menuId);
         $tree = [];
         $map = [];
@@ -339,7 +340,7 @@ class MenuManager
         }
         return [
             'menu'   => $menu,
-            'items'  => self::getMenuItemsTree($menu['id']),
+            'items'  => self::getMenuItemsTree((int) $menu['id']),
         ];
     }
 

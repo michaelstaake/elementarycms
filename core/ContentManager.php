@@ -954,7 +954,7 @@ class ContentManager
 
             if ($sectionId) {
                 Database::update('page_sections', [
-                    'sort_order' => (int) $sectionData['sort_order'],
+                    'sort_order' => (int) ($sectionData['sort_order'] ?? 0),
                     'css_class'  => trim($sectionData['css_class'] ?? ''),
                     'css_id'     => trim($sectionData['css_id'] ?? ''),
                     'inline_css' => trim($sectionData['inline_css'] ?? '') ?: null,
@@ -964,7 +964,7 @@ class ContentManager
             } else {
                 $sectionId = Database::insert('page_sections', [
                     'page_id'    => $pageId,
-                    'sort_order' => (int) $sectionData['sort_order'],
+                    'sort_order' => (int) ($sectionData['sort_order'] ?? 0),
                     'css_class'  => trim($sectionData['css_class'] ?? ''),
                     'css_id'     => trim($sectionData['css_id'] ?? ''),
                     'inline_css' => trim($sectionData['inline_css'] ?? '') ?: null,
@@ -981,7 +981,7 @@ class ContentManager
                 if ($rowId) {
                     Database::update('page_rows', [
                         'section_id' => $sectionId,
-                        'sort_order' => (int) $rowData['sort_order'],
+                        'sort_order' => (int) ($rowData['sort_order'] ?? 0),
                         'css_class'  => trim($rowData['css_class'] ?? ''),
                         'css_id'     => trim($rowData['css_id'] ?? ''),
                         'inline_css' => trim($rowData['inline_css'] ?? '') ?: null,
@@ -991,7 +991,7 @@ class ContentManager
                 } else {
                     $rowId = Database::insert('page_rows', [
                         'section_id' => $sectionId,
-                        'sort_order' => (int) $rowData['sort_order'],
+                        'sort_order' => (int) ($rowData['sort_order'] ?? 0),
                         'css_class'  => trim($rowData['css_class'] ?? ''),
                         'css_id'     => trim($rowData['css_id'] ?? ''),
                         'inline_css' => trim($rowData['inline_css'] ?? '') ?: null,
@@ -1008,8 +1008,8 @@ class ContentManager
                     if ($colId) {
                         Database::update('page_columns', [
                             'row_id'     => $rowId,
-                            'sort_order' => (int) $colData['sort_order'],
-                            'width'      => (float) $colData['width'],
+                            'sort_order' => (int) ($colData['sort_order'] ?? 0),
+                            'width'      => (float) ($colData['width'] ?? 12),
                             'css_class'  => trim($colData['css_class'] ?? ''),
                             'css_id'     => trim($colData['css_id'] ?? ''),
                             'inline_css' => trim($colData['inline_css'] ?? '') ?: null,
@@ -1019,8 +1019,8 @@ class ContentManager
                     } else {
                         $colId = Database::insert('page_columns', [
                             'row_id'     => $rowId,
-                            'sort_order' => (int) $colData['sort_order'],
-                            'width'      => (float) $colData['width'],
+                            'sort_order' => (int) ($colData['sort_order'] ?? 0),
+                            'width'      => (float) ($colData['width'] ?? 12),
                             'css_class'  => trim($colData['css_class'] ?? ''),
                             'css_id'     => trim($colData['css_id'] ?? ''),
                             'inline_css' => trim($colData['inline_css'] ?? '') ?: null,

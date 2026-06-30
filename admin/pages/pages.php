@@ -943,6 +943,7 @@ if ($action === 'edit' || $action === 'new') {
         },
 
         syncStructure() {
+            this.syncEditors();
             document.getElementById('builderStructureInput').value = JSON.stringify({ sections: this.structure.sections || [] });
         },
 
@@ -1797,8 +1798,8 @@ if ($action === 'edit' || $action === 'new') {
                     ],
                     dialogsInBody: true,
                     callbacks: {
-                        onContentChange: function(contents, $editable) {
-                            const keys = $(this)[0].dataset.keys;
+                        onChange: function(contents) {
+                            const keys = $el[0].dataset.keys;
                             if (keys) {
                                 const [si, ri, ci, bi] = keys.split(',').map(Number);
                                 self.updateBlockText(si, ri, ci, bi, contents);
@@ -1813,7 +1814,19 @@ if ($action === 'edit' || $action === 'new') {
         },
 
         syncEditors() {
-            // Content is synced via onContentChange callback, no extra sync needed
+            const self = this;
+            $('.block-text-editor').each(function() {
+                const $el = $(this);
+                if (!$el.data('summernote')) {
+                    return;
+                }
+                const keys = this.dataset.keys;
+                if (!keys) {
+                    return;
+                }
+                const [si, ri, ci, bi] = keys.split(',').map(Number);
+                self.updateBlockText(si, ri, ci, bi, $el.summernote('code'));
+            });
         },
 
         renderImageBlock(block, si, ri, ci, bi) {
