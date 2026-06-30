@@ -212,6 +212,14 @@ body {
     line-height: 1.75;
 }
 
+.single-page p {
+    margin-bottom: 1rem;
+}
+
+.single-page p:last-child {
+    margin-bottom: 0;
+}
+
 .category-description {
     color: var(--text-muted);
     margin-bottom: 2rem;
