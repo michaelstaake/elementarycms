@@ -716,8 +716,8 @@ if ($action === 'edit' || $action === 'new') {
                 return;
             }
 
-            // Don't allow dragging if the target is an interactive element
-            if (e.target.closest('button, a, input, textarea, select, .dropdown')) {
+            // Only allow dragging from the grip handle
+            if (!e.target.closest('.builder-drag-handle')) {
                 e.preventDefault();
                 return;
             }
@@ -2352,12 +2352,6 @@ if ($action === 'edit' || $action === 'new') {
         }
 
         /* Drag and Drop Styles */
-        [draggable="true"] {
-            cursor: grab;
-        }
-        [draggable="true"]:active {
-            cursor: grabbing;
-        }
         .builder-drag-handle {
             cursor: grab;
             user-select: none;
