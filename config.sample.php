@@ -65,7 +65,7 @@ return [
     'protected_users'  => [],
 
     // Allowed file extensions for uploads
-    'file_types'       => ['png', 'jpg', 'jpeg', ,'svg', 'ico', 'pdf', 'xlsx',],
+    'file_types'       => ['png', 'jpg', 'jpeg', 'svg', 'ico', 'pdf', 'xlsx',],
 
     // Maximum allowed file upload size
     'file_size'        => '256M',
