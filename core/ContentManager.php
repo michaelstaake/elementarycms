@@ -1137,7 +1137,22 @@ class ContentManager
             }
         }
 
-        // Delete removed items (cascade handles children)
+        // Delete removed items (children first due to FK constraints)
+        $deletedBlocks = array_diff($existingBlocks, $keptBlockIds);
+        foreach ($deletedBlocks as $bid) {
+            Database::delete('page_blocks', 'id = ?', [(int) $bid]);
+        }
+
+        $deletedColumns = array_diff($existingColumns, $keptColumnIds);
+        foreach ($deletedColumns as $cid) {
+            Database::delete('page_columns', 'id = ?', [(int) $cid]);
+        }
+
+        $deletedRows = array_diff($existingRows, $keptRowIds);
+        foreach ($deletedRows as $rid) {
+            Database::delete('page_rows', 'id = ?', [(int) $rid]);
+        }
+
         $deletedSections = array_diff($existingSections, $keptSectionIds);
         foreach ($deletedSections as $sid) {
             Database::delete('page_sections', 'id = ?', [(int) $sid]);
