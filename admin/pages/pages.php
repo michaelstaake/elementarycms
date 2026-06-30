@@ -553,6 +553,13 @@ if ($action === 'edit' || $action === 'new') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3" id="elementWidthGroup" style="display: none;">
+                        <label class="form-label" for="elementWidth"><?= __t('column_width') ?></label>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="range" class="form-range flex-grow-1" id="elementWidth" min="1" max="99" step="1" oninput="document.getElementById('elementWidthValue').textContent = this.value + '%'">
+                            <span class="small text-muted" id="elementWidthValue" style="min-width: 40px;">50%</span>
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <label class="form-label" for="elementCssClass"><?= __t('css_class') ?></label>
                         <input type="text" class="form-control" id="elementCssClass" placeholder="my-class another-class">
@@ -1128,7 +1135,7 @@ if ($action === 'edit' || $action === 'new') {
             }
         },
 
-        setColumnWidth(sectionIndex, rowIndex, colIndex, width) {
+        applyColumnWidth(sectionIndex, rowIndex, colIndex, width) {
             const row = this.structure.sections[sectionIndex].rows[rowIndex];
             const col = row.columns[colIndex];
             const total = row.columns.length;
@@ -1146,9 +1153,6 @@ if ($action === 'edit' || $action === 'new') {
             const diff = 100 - currentSum;
             const lastOtherIndex = row.columns.length - 1 === colIndex ? row.columns.length - 2 : row.columns.length - 1;
             row.columns[lastOtherIndex].width = Math.round((row.columns[lastOtherIndex].width + diff) * 100) / 100;
-            this.render();
-            this.updateCodeView();
-            this.updatePreview();
         },
 
         moveColumn(sectionIndex, rowIndex, colIndex, direction) {
@@ -1505,6 +1509,22 @@ if ($action === 'edit' || $action === 'new') {
             document.getElementById('elementCssClass').value = el.css_class || '';
             document.getElementById('elementCssId').value = el.css_id || '';
             document.getElementById('elementInlineCss').value = el.inline_css || '';
+
+            const widthGroup = document.getElementById('elementWidthGroup');
+            const colCount = type === 'column' ? this.structure.sections[si].rows[ri].columns.length : 0;
+            if (type === 'column' && colCount > 1) {
+                const minWidth = Math.round(100 / colCount * 10) / 10;
+                const maxWidth = 100 - (colCount - 1) * minWidth;
+                const widthInput = document.getElementById('elementWidth');
+                widthInput.min = minWidth;
+                widthInput.max = maxWidth;
+                widthInput.value = Math.round(el.width);
+                document.getElementById('elementWidthValue').textContent = Math.round(el.width) + '%';
+                widthGroup.style.display = '';
+            } else {
+                widthGroup.style.display = 'none';
+            }
+
             bootstrap.Modal.getOrCreateInstance(document.getElementById('elementSettingsModal')).show();
         },
 
@@ -1516,6 +1536,12 @@ if ($action === 'edit' || $action === 'new') {
             el.css_class = document.getElementById('elementCssClass').value.trim();
             el.css_id = document.getElementById('elementCssId').value.trim();
             el.inline_css = document.getElementById('elementInlineCss').value.trim();
+            if (ctx.type === 'column') {
+                const row = this.structure.sections[ctx.si].rows[ctx.ri];
+                if (row.columns.length > 1) {
+                    this.applyColumnWidth(ctx.si, ctx.ri, ctx.ci, Number(document.getElementById('elementWidth').value));
+                }
+            }
             bootstrap.Modal.getInstance(document.getElementById('elementSettingsModal')).hide();
             this.elementSettingsContext = null;
             this.render();
@@ -1644,7 +1670,6 @@ if ($action === 'edit' || $action === 'new') {
             const settingsLabel = PageBuilderConfig.element_settings;
             const deleteLabel = PageBuilderConfig.delete;
             const emptyColText = PageBuilderConfig.empty_column;
-            const columnWidthLabel = PageBuilderConfig.column_width;
             const addTextBlockLabel = PageBuilderConfig.add_text_block;
             const addImageBlockLabel = PageBuilderConfig.add_image_block;
             const imageFromFilesLabel = PageBuilderConfig.image_from_files;
@@ -1657,15 +1682,12 @@ if ($action === 'edit' || $action === 'new') {
             const dragPath = JSON.stringify([si, ri, ci]);
             const row = this.structure.sections[si].rows[ri];
             const colCount = row.columns.length;
-            const showWidthControl = colCount > 1;
-            const minWidth = Math.round(100 / colCount * 10) / 10; // Minimum width to prevent columns from disappearing
-            const maxWidth = 100 - (colCount - 1) * minWidth;
             return `
                 <div class="builder-column border rounded p-2 bg-white drag-target" style="flex: ${col.width}; min-width: 0;" draggable="true" data-drag-type="column" data-drag-path="${dragPath}">
                     <div class="builder-column-header d-flex justify-content-between align-items-center mb-2">
                         <small class="text-muted">
                             <i class="bi bi-grip-vertical builder-drag-handle" title="Drag to reorder"></i>
-                            ${columnLabel} ${ci + 1} (${Math.round(col.width)}%)
+                            ${columnLabel} ${ci + 1}${colCount > 1 ? ` <span class="badge text-bg-light border">${Math.round(col.width)}%</span>` : ''}
                         </small>
                         <div class="dropdown">
                             <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static">
@@ -1678,15 +1700,6 @@ if ($action === 'edit' || $action === 'new') {
                             </ul>
                         </div>
                     </div>
-                    ${showWidthControl ? `
-                    <div class="mb-2">
-                        <label class="form-label small text-muted mb-1">${columnWidthLabel}</label>
-                        <div class="d-flex align-items-center gap-2">
-                            <input type="range" class="form-range flex-grow-1" min="${minWidth}" max="${maxWidth}" step="1" value="${Math.round(col.width)}" oninput="PageBuilder.setColumnWidth(${si}, ${ri}, ${ci}, Number(this.value))" id="colWidth_${si}_${ri}_${ci}">
-                            <span class="small text-muted" style="min-width: 40px;">${Math.round(col.width)}%</span>
-                        </div>
-                    </div>
-                    ` : ''}
                     ${blocksHtml || '<p class="text-muted text-center mb-0 small">' + emptyColText + '</p>'}
                     <div class="d-flex flex-wrap gap-1 mt-1">
                         <button type="button" class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="PageBuilder.addBlock(${si}, ${ri}, ${ci}, 'text')">
