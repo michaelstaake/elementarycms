@@ -17,7 +17,14 @@ if (BruteForceProtection::isBanned($ip)) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$banned) {
-    if (isset($_POST['verify_2fa'])) {
+    if (isset($_POST['cancel_2fa'])) {
+        if (isset($_SESSION['pending_2fa_user_id'])) {
+            $userId = $_SESSION['pending_2fa_user_id'];
+            Database::delete('user_2fa_codes', 'user_id = ?', [$userId]);
+            unset($_SESSION['pending_2fa_user_id']);
+        }
+        redirect(admin_url('login'));
+    } elseif (isset($_POST['verify_2fa'])) {
         $result = Auth::verify2fa($_POST['code'] ?? '');
         if ($result['success']) {
             redirect(admin_url());
@@ -75,6 +82,9 @@ ob_start();
                     <input type="text" id="code" name="code" class="form-control" required autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autofocus onfocus="this.select()">
                 </div>
                 <button type="submit" class="btn btn-dark w-100"><?= __t('verify') ?></button>
+                <div class="text-center mt-3">
+                    <button type="submit" name="cancel_2fa" value="1" class="btn btn-link" formnovalidate><?= __t('cancel') ?></button>
+                </div>
             </form>
         <?php else: ?>
             <form method="post">
