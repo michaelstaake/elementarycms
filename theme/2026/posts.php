@@ -10,9 +10,6 @@
     <?php if (!empty($meta_description)): ?>
     <meta name="description" content="<?= esc($meta_description) ?>">
     <?php endif; ?>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="<?= url('theme/2026/assets/css/style.css') ?>" rel="stylesheet">
     <?php favicon(); ?>
     <?php head_content(); ?>
