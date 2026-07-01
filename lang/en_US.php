@@ -172,7 +172,6 @@ return [
     'menu_item_parent'           => 'Parent',
     'menu_item_top_level'        => '— Top level —',
     'menu_item_type'             => 'Type',
-    'menu_item_type_custom'      => 'Custom link',
     'menu_item_type_home'        => 'Home',
     'menu_item_type_page'        => 'Page',
     'menu_item_type_post'        => 'Post',

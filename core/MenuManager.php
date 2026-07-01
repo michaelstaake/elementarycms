@@ -172,7 +172,7 @@ class MenuManager
                     }
                 }
                 break;
-            case 'custom':
+            case 'custom': // legacy type, treated as url
             case 'url':
                 return Validator::sanitizeMenuUrl($storedUrl);
         }
@@ -204,7 +204,7 @@ class MenuManager
      */
     public static function createMenuItem(array $data): array
     {
-        $type = $data['type'] ?? 'custom';
+        $type = self::normalizeMenuItemType($data['type'] ?? 'url');
         $typeId = isset($data['type_id']) && $data['type_id'] !== null && $data['type_id'] !== ''
             ? (int) $data['type_id']
             : null;
@@ -236,7 +236,7 @@ class MenuManager
             return ['success' => false, 'error' => 'Menu item not found.'];
         }
 
-        $type = $data['type'] ?? 'custom';
+        $type = self::normalizeMenuItemType($data['type'] ?? 'url');
         $typeId = isset($data['type_id']) && $data['type_id'] !== null && $data['type_id'] !== ''
             ? (int) $data['type_id']
             : null;
@@ -364,6 +364,14 @@ class MenuManager
         set_setting('menu_location_' . $location, $menuName);
         Logger::log('menu_location_updated', Auth::user()['id'] ?? null, "Location: $location -> Menu: $menuName");
         self::bumpPublicCache();
+    }
+
+    /**
+     * Normalize menu item type (maps legacy 'custom' to 'url').
+     */
+    private static function normalizeMenuItemType(string $type): string
+    {
+        return $type === 'custom' ? 'url' : $type;
     }
 
     private static function bumpPublicCache(): void

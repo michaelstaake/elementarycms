@@ -470,7 +470,7 @@ function menu(string $location, string $class = 'menu'): void
  */
 function menu_item(array $item): void
 {
-    $type = $item['type'] ?? 'custom';
+    $type = $item['type'] ?? 'url';
     $typeId = isset($item['type_id']) && $item['type_id'] !== null && $item['type_id'] !== ''
         ? (int) $item['type_id']
         : null;

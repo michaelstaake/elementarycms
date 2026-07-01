@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'create_item':
-            $itemType = $_POST['item_type'] ?? 'custom';
+            $itemType = $_POST['item_type'] ?? 'url';
             $result = MenuManager::createMenuItem([
                 'menu_id'   => (int) $_POST['menu_id'],
                 'parent_id' => $_POST['parent_id'] ?? 0,
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'update_item':
-            $itemType = $_POST['item_type'] ?? 'custom';
+            $itemType = $_POST['item_type'] ?? 'url';
             $result = MenuManager::updateMenuItem((int) $_POST['item_id'], [
                 'parent_id' => $_POST['parent_id'] ?? 0,
                 'title'     => $_POST['item_title'] ?? '',
@@ -277,7 +277,6 @@ ob_start();
                         <label class="form-label"><?= __t('menu_item_type') ?></label>
                         <select name="item_type" class="form-select" id="add-item-type-<?= $menu['id'] ?>" onchange="toggleItemTypeFields(<?= $menu['id'] ?>, 'add')">
                             <option value="home"><?= __t('menu_item_type_home') ?></option>
-                            <option value="custom"><?= __t('menu_item_type_custom') ?></option>
                             <option value="url"><?= __t('menu_item_type_url') ?></option>
                             <?php if (!empty($availablePages)): ?>
                             <option value="page"><?= __t('menu_item_type_page') ?></option>
@@ -421,8 +420,7 @@ function showEditItemForm(menuId, itemId, title, url, parentId, type, typeId) {
                 <label class="form-label"><?= __t('menu_item_type') ?></label>
                 <select name="item_type" class="form-select" id="edit-item-type-${itemId}" onchange="toggleItemTypeFields(${menuId}, 'edit', ${itemId})">
                     <option value="home" ${type === 'home' ? 'selected' : ''}><?= __t('menu_item_type_home') ?></option>
-                    <option value="custom" ${type === 'custom' ? 'selected' : ''}><?= __t('menu_item_type_custom') ?></option>
-                    <option value="url" ${type === 'url' ? 'selected' : ''}><?= __t('menu_item_type_url') ?></option>
+                    <option value="url" ${type === 'url' || type === 'custom' ? 'selected' : ''}><?= __t('menu_item_type_url') ?></option>
                     <?php if (!empty($availablePages)): ?>
                     <option value="page" ${type === 'page' ? 'selected' : ''}><?= __t('menu_item_type_page') ?></option>
                     <?php endif; ?>
@@ -440,7 +438,7 @@ function showEditItemForm(menuId, itemId, title, url, parentId, type, typeId) {
                 <input type="text" class="form-control" name="item_title" value="${title}" required>
             </div>
 
-            <div class="mb-3 item-url-field ${type !== 'custom' && type !== 'url' ? 'd-none' : ''}">
+            <div class="mb-3 item-url-field ${type !== 'url' && type !== 'custom' ? 'd-none' : ''}">
                 <label class="form-label"><?= __t('menu_item_url') ?></label>
                 <input type="url" class="form-control" name="item_url" value="${url}" placeholder="<?= __t('url_placeholder') ?>">
             </div>
@@ -520,7 +518,7 @@ function toggleItemTypeFields(menuId, mode, itemId = null) {
         // Auto-fill title and URL for home
         const titleInput = container.querySelector('input[name="item_title"]');
         if (titleInput) titleInput.value = '<?= __t('menu_item_home_title') ?>';
-    } else if (type === 'custom' || type === 'url') {
+    } else if (type === 'url') {
         urlField.classList.remove('d-none');
     } else if (type === 'page') {
         pageField.classList.remove('d-none');
