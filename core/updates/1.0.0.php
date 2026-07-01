@@ -46,7 +46,7 @@ Database::query("
         `parent_id` INT UNSIGNED NULL DEFAULT 0,
         `title` VARCHAR(255) NOT NULL,
         `url` VARCHAR(500) NOT NULL DEFAULT '',
-        `type` ENUM('custom', 'home', 'page', 'post', 'category', 'url') NOT NULL DEFAULT 'custom',
+        `type` ENUM('home', 'page', 'post', 'category', 'url') NOT NULL DEFAULT 'url',
         `type_id` INT UNSIGNED NULL,
         `sort_order` INT UNSIGNED NOT NULL DEFAULT 0,
         `created_at` DATETIME NOT NULL,
@@ -96,7 +96,7 @@ Database::query("CREATE TABLE IF NOT EXISTS `page_blocks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 // Ensure menu_items.type includes 'home' for menus created before 0.0.5.
-$ddl("ALTER TABLE `menu_items` MODIFY `type` ENUM('custom', 'home', 'page', 'post', 'category', 'url') NOT NULL DEFAULT 'custom'");
+$ddl("ALTER TABLE `menu_items` MODIFY `type` ENUM('home', 'page', 'post', 'category', 'url') NOT NULL DEFAULT 'url'");
 
 // Soft-delete (Recycle Bin) support on posts and pages (0.0.6).
 $ddl("ALTER TABLE `posts` ADD COLUMN `deleted_at` DATETIME NULL AFTER `updated_at`");

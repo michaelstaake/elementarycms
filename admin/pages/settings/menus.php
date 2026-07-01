@@ -420,7 +420,7 @@ function showEditItemForm(menuId, itemId, title, url, parentId, type, typeId) {
                 <label class="form-label"><?= __t('menu_item_type') ?></label>
                 <select name="item_type" class="form-select" id="edit-item-type-${itemId}" onchange="toggleItemTypeFields(${menuId}, 'edit', ${itemId})">
                     <option value="home" ${type === 'home' ? 'selected' : ''}><?= __t('menu_item_type_home') ?></option>
-                    <option value="url" ${type === 'url' || type === 'custom' ? 'selected' : ''}><?= __t('menu_item_type_url') ?></option>
+                    <option value="url" ${type === 'url' ? 'selected' : ''}><?= __t('menu_item_type_url') ?></option>
                     <?php if (!empty($availablePages)): ?>
                     <option value="page" ${type === 'page' ? 'selected' : ''}><?= __t('menu_item_type_page') ?></option>
                     <?php endif; ?>
@@ -438,7 +438,7 @@ function showEditItemForm(menuId, itemId, title, url, parentId, type, typeId) {
                 <input type="text" class="form-control" name="item_title" value="${title}" required>
             </div>
 
-            <div class="mb-3 item-url-field ${type !== 'url' && type !== 'custom' ? 'd-none' : ''}">
+            <div class="mb-3 item-url-field ${type !== 'url' ? 'd-none' : ''}">
                 <label class="form-label"><?= __t('menu_item_url') ?></label>
                 <input type="url" class="form-control" name="item_url" value="${url}" placeholder="<?= __t('url_placeholder') ?>">
             </div>
