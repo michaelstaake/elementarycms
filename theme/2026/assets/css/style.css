@@ -212,6 +212,15 @@ body {
     line-height: 1.75;
 }
 
+.content li {
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.single-post p {
+    margin-bottom: 1rem;
+}
+
 .single-page p {
     margin-bottom: 1rem;
 }
