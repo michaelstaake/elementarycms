@@ -31,6 +31,7 @@ body {
     background: #fff;
     border-bottom: 1px solid var(--border);
     padding: 1.25rem 0;
+    position: relative;
 }
 
 .site-header .container {
@@ -121,6 +122,12 @@ body {
     border: none;
     cursor: pointer;
     padding: 0.25rem;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.nav-toggle:hover {
+    background: var(--off-white);
 }
 
 .nav-toggle-icon,
@@ -130,7 +137,8 @@ body {
     width: 22px;
     height: 2px;
     background: var(--off-black);
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    border-radius: 1px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
 }
 
 .nav-toggle-icon {
@@ -179,10 +187,10 @@ body {
         right: 0;
         background: #fff;
         border-bottom: 1px solid var(--border);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.35s ease;
         z-index: 100;
     }
 
@@ -193,15 +201,31 @@ body {
 
     .site-nav .menu {
         flex-direction: column;
+        padding: 0.5rem 0;
     }
 
     .site-nav .menu .menu-item > a {
         display: block;
-        padding: 0.75rem 1.5rem;
+        padding: 0.875rem 1.75rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--off-black);
+        transition: background 0.15s ease, color 0.15s ease;
+        border-left: 3px solid transparent;
+    }
+
+    .site-nav .menu .menu-item > a:hover,
+    .site-nav .menu .menu-item > a:focus {
+        background: var(--off-white);
+        border-left-color: var(--off-black);
+        text-decoration: none;
     }
 
     .site-nav .menu .menu-item-has-children > a::after {
         content: ' ▸';
+        float: right;
+        margin-left: 0.5rem;
+        opacity: 0.4;
     }
 
     .site-nav .menu .sub-menu {
@@ -210,16 +234,19 @@ body {
         visibility: visible;
         box-shadow: none;
         border: none;
-        border-top: 1px solid var(--border);
         min-width: 0;
+        background: var(--off-white);
     }
 
     .site-nav .menu .sub-menu .menu-item > a {
-        padding-left: 2.5rem;
+        padding-left: 2.75rem;
+        font-size: 0.9375rem;
+        font-weight: 400;
     }
 
     .site-nav .menu .sub-menu .sub-menu .menu-item > a {
-        padding-left: 3.5rem;
+        padding-left: 3.75rem;
+        font-size: 0.875rem;
     }
 }
 
