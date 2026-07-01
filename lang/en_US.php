@@ -397,7 +397,7 @@ return [
 
     // Analytics
     'analytics'                  => 'Analytics',
-    'analytics_desc'             => 'Add custom analytics tracking code to your site. This code will be included in the <head> section of every page on your website.',
+    'analytics_desc'             => 'Add custom analytics tracking code to your site. This code will be included in the <head> section of front-end pages only.',
     'analytics_enabled'          => 'Enable analytics',
     'analytics_enabled_help'     => 'When enabled, the code below will be injected into the <head> section of all front-end pages.',
     'analytics_code'             => 'Analytics code',

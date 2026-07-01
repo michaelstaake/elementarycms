@@ -431,12 +431,26 @@ function autoload_core(string $class): void
 }
 
 /**
+ * Whether the current request is a public front-end page.
+ * Excludes admin, login, install, and update routes.
+ */
+function is_frontend_request(): bool
+{
+    $route = trim($_GET['route'] ?? '', '/');
+    if ($route === '') {
+        return true;
+    }
+    $first = explode('/', $route)[0] ?? '';
+    return !in_array($first, ['admin', 'install', 'update'], true);
+}
+
+/**
  * Output custom analytics/head code if enabled.
- * Safe to call from theme templates inside <head>.
+ * Only outputs on front-end requests; safe to call from theme templates inside <head>.
  */
 function head_content(): void
 {
-    if (!setting('analytics_enabled', false)) {
+    if (!is_frontend_request() || !setting('analytics_enabled', false)) {
         return;
     }
     $code = (string) setting('analytics_code', '');
