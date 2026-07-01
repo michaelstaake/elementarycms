@@ -446,6 +446,17 @@ function head_content(): void
 }
 
 /**
+ * Check if a menu is assigned to a location and has items.
+ *
+ * @param string $location The menu location name as defined by the theme.
+ */
+function has_menu(string $location): bool
+{
+    $menuData = \Elementary\MenuManager::getMenuTreeForLocation($location);
+    return !empty($menuData['items']);
+}
+
+/**
  * Render a navigation menu for a given theme location.
  *
  * @param string $location The menu location name as defined by the theme.

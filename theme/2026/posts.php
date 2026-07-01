@@ -21,9 +21,14 @@
     <header class="site-header">
         <div class="container">
             <a href="<?= esc($site_url) ?>" class="site-logo"><?= esc($site_name) ?></a>
-            <nav aria-label="Main navigation">
+            <?php if (has_menu('primary')): ?>
+            <button type="button" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="nav-toggle-icon"></span>
+            </button>
+            <nav class="site-nav" aria-label="Main navigation">
                 <?php menu('primary'); ?>
             </nav>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -61,5 +66,6 @@
             <p>&copy; <?= date('Y') ?> <?= esc($site_name) ?></p>
         </div>
     </footer>
+    <script src="<?= url('theme/2026/assets/js/main.js') ?>"></script>
 </body>
 </html>
